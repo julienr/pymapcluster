@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+        <style type="text/css">
+          html { height: 100% }
+          body { height: 100%; margin: 0; padding: 0 }
+          #wrap { width: 810px; margin:0 auto; }
+          #left_col { float: left; width: 400px; }
+          #right_col { float:right; width: 400px; margin-left: 10px;}
+          #orig_map { width: 400px; height: 400px; }
+          #clust_map { width: 400px; height: 400px; }
+        </style>
+    </head>
+    <body>
+        <div id="wrap">
+            <div id="left_col">
+                <h1>Original</h1>
+                <div id="orig_map"></div>
+            </div>
+            <div id="right_col">
+                <h1>Clustered</h1>
+                <div id="clust_map"></div>
+            </div>
+        </div>
+
+        <script type="text/javascript"
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsyGBE5AMjlj5eYNQR6_FmgeM54rDPi58&sensor=false">
+        </script>
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+
+        <script type="text/javascript">
+            function initMap(div, markers) {
+                var mapOptions = {
+                    center: new google.maps.LatLng(46.815099, 8.22876),
+                    zoom: 8,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                };
+                map = new google.maps.Map(div, mapOptions);
+
+                for (var i = 0; i < markers.length; ++i) {
+                    var lat = markers[i][0];
+                    var lng = markers[i][1];
+                    var marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(lat, lng),
+                        map:map
+                    });
+                }
+
+                return map;
+            }
+            var _markers = {{ markers|safe }};
+            var _clust_markers = {{ clust_markers|safe }};
+            $(function() {
+                window.origMap = initMap($('#orig_map')[0], _markers);
+                window.clustMap = initMap($('#clust_map')[0], _clust_markers);
+            });
+        </script>
+    </body>
+</html>
